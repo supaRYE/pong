@@ -32,13 +32,13 @@
     </define>
     <verbose-stacktraces>true</verbose-stacktraces>
     <source-path append="true">
-      <path-element>D:\Documents\Flash\Pong\src</path-element>
+      <path-element>C:\Users\Ryan\Documents\GitHub\pong\Pong\src</path-element>
       <path-element>E:\Program Files\flixel</path-element>
       <path-element>E:\Program Files (x86)\FlashDevelop\Library\AS3\classes</path-element>
     </source-path>
   </compiler>
   <file-specs>
-    <path-element>D:\Documents\Flash\Pong\src\Pong.as</path-element>
+    <path-element>C:\Users\Ryan\Documents\GitHub\pong\Pong\src\Pong.as</path-element>
   </file-specs>
   <default-background-color>#FFFFFF</default-background-color>
   <default-frame-rate>30</default-frame-rate>
