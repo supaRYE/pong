@@ -10,6 +10,10 @@ package
 		[Embed(source = "data/ball.png")] private var ballGraphic:Class;
 		[Embed(source = "data/P1.png")] private var p1Graphic:Class;
 		[Embed(source = "data/P2.png")] private var p2Graphic:Class;
+		[Embed(source = "data/hit.mp3")] private var hitMp3:Class;
+		[Embed(source = "data/point.mp3")] private var pointMp3:Class;
+		[Embed(source = "data/startup.mp3")] private var startupMp3:Class;
+		
 		
 		private var ball:FlxSprite;
 		private var p1:Player;
@@ -31,6 +35,8 @@ package
 			
 			// Set up background color
 			FlxG.bgColor = 0xff101010;
+			
+			FlxG.play(startupMp3);
 			
 			// Set up players
 			p1 = new Player(p1Graphic, "W", "S", 16, 104);
@@ -83,6 +89,7 @@ package
 		
 		public function ballCollide():void
 		{
+			FlxG.play(hitMp3);
 			p1.paddle.scaleSpeed(scale, maxScale);
 			p2.paddle.scaleSpeed(scale, maxScale);
 			if (!(p1.paddle.maxVelocity.y >= p1.paddle.paddleInitMaxVelocityY * maxScale) && !(p2.paddle.maxVelocity.y >= p2.paddle.paddleInitMaxVelocityY * maxScale))
@@ -101,6 +108,7 @@ package
 		{
 			if (ball.x <= 0) // P2 Scores
 			{
+				FlxG.play(pointMp3);
 				p2.score++;
 				ball.kill();
 				p1.paddle.resetSpeed();
@@ -111,6 +119,7 @@ package
 			
 			else if (ball.x >= 312) // P1 Scores
 			{
+				FlxG.play(pointMp3);
 				p1.score++;
 				ball.kill();
 				p1.paddle.resetSpeed();
