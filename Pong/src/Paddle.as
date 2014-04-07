@@ -5,7 +5,7 @@ package
 	public class Paddle extends FlxSprite
 	{
 		public var paddleInitMaxVelocityY:Number = 200;
-		public var paddleInitDragY:Number = 640;
+		public var paddleInitDragY:Number = 320;
 		private var up:String;
 		private var down:String;
 		
@@ -27,17 +27,17 @@ package
 			this.acceleration.y = 0;
 			if (FlxG.keys.pressed(up))
 			{
-				this.acceleration.y -= this.drag.y;
+				this.acceleration.y -= 2 * this.drag.y;
 				if (this.y <= 0) {
-					this.acceleration.y = 0;
+					this.acceleration.y = 100;
 					this.velocity.y = 0;
 				}
 			}
 			if (FlxG.keys.pressed(down)) // Not else if because pressing up and down should negate
 			{
-				this.acceleration.y += this.drag.y;
+				this.acceleration.y += 2 * this.drag.y;
 				if (this.y > 208) {
-					this.acceleration.y = 0;
+					this.acceleration.y = -100;
 					this.velocity.y = 0;
 				}
 			}

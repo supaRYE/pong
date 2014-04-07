@@ -15,10 +15,15 @@ package
 			title.setFormat (null, 50, 0xffffffff, "center");
 			add(title);
 			
+			var author:FlxText;
+			author = new FlxText(0, FlxG.height - 12, FlxG.width, "By: Ryan Tsoi");
+			author.setFormat(null, 8, 0xff40404040, "right");
+			add(author);
+			
 			var controlsTitle:FlxText;
-			p1Controls = new FlxText(110, FlxG.height - 120, FlxG.width, "P1 Controls     P2 Controls");
-			p1Controls.setFormat(null, 8, 0xffffffff);
-			add(p1Controls);
+			controlsTitle = new FlxText(110, FlxG.height - 120, FlxG.width, "P1 Controls     P2 Controls");
+			controlsTitle.setFormat(null, 8, 0xffffffff);
+			add(controlsTitle);
 			
 			var p1Controls:FlxText;
 			p1Controls = new FlxText(75, FlxG.height - 105, FlxG.width, "UP:              W                Up Arw");

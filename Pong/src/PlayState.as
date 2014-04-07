@@ -18,8 +18,8 @@ package
 		private var ball:FlxSprite;
 		private var p1:Player;
 		private var p2:Player;
-		private var scale:Number = 1.10;
-		private var maxScale:Number = 2.5;
+		private var scale:Number = 1.07;
+		private var maxScale:Number = 2.0;
 		private var ballInitVelocityX:Number = 100;
 		private var ptsToWin:int = 5;
 		private var score:FlxText;
@@ -56,9 +56,12 @@ package
 			ball = new FlxSprite(156, 116);
 			ball.loadGraphic(ballGraphic, true, true);
 			var maxY:Number = 50;
+			
+			// Generate random x and y velocities
 			ball.velocity.y = Math.floor(Math.random() * (maxY * 2 + 1)) - maxY;
 			ball.velocity.x = 120 - (.2 * Math.abs(ball.velocity.y));
 			ball.velocity.x *= 1 - (2 * Math.floor(Math.random() * 2));
+			
 			ball.elasticity = 1;
 			ball.maxVelocity.x = Math.abs(ball.velocity.x) * maxScale;
 			add(ball);
@@ -83,8 +86,8 @@ package
 		{
 			var paddle:FlxSprite = obj1 as FlxSprite;
 			var ball:FlxSprite = obj2 as FlxSprite;
+			ball.velocity.y += ((ball.y + 4) - (paddle.y + 16)) * 3 + paddle.velocity.y * 36.0 / paddle.maxVelocity.y;
 			paddle.play("contact");
-			ball.velocity.y += ((ball.y + 4) - (paddle.y + 16)) * 2;
 			ballCollide();
 		}
 		
@@ -105,30 +108,30 @@ package
 			if (ball.x <= 0) // P2 Scores
 			{
 				p2.score++;
+				score.text = p1.score + "   " + p2.score;
 				if (p2.score >= ptsToWin)
 				{
-					FlxG.switchState(new WinState("2"));
+					FlxG.switchState(new WinState("PLAYER 2 WINS\n" + p1.score + " - " + p2.score));
 				}
 				FlxG.play(pointMp3);
 				ball.kill();
 				p1.paddle.resetSpeed();
 				p2.paddle.resetSpeed();
-				score.text = p1.score + "   " + p2.score;
 				createBall();
 			}
 			
 			else if (ball.x >= 312) // P1 Scores
 			{
 				p1.score++;
+				score.text = p1.score + "   " + p2.score;
 				if (p1.score >= ptsToWin)
 				{
-					FlxG.switchState(new WinState("1"));
+					FlxG.switchState(new WinState("PLAYER 1 WINS\n" + p1.score + " - " + p2.score));
 				}
 				FlxG.play(pointMp3);
 				ball.kill();
 				p1.paddle.resetSpeed();
 				p2.paddle.resetSpeed();
-				score.text = p1.score + "   " + p2.score;
 				createBall();
 			}
 			else if (ball.y <= 0 || ball.y >= 232) // Rebound off top or bottom edge
