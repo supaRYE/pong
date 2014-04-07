@@ -4,6 +4,7 @@ package
     import org.flixel.*;
 	import mx.core.BitmapAsset;
 	import org.flixel.system.input.Keyboard;
+	import WinState;
     
     public class PlayState extends FlxState
     {
@@ -14,21 +15,17 @@ package
 		[Embed(source = "data/point.mp3")] private var pointMp3:Class;
 		[Embed(source = "data/startup.mp3")] private var startupMp3:Class;
 		
-		
 		private var ball:FlxSprite;
 		private var p1:Player;
 		private var p2:Player;
 		private var scale:Number = 1.10;
-		private var maxScale:Number = 4;
+		private var maxScale:Number = 2.5;
 		private var ballInitVelocityX:Number = 100;
+		private var ptsToWin:int = 5;
 		private var score:FlxText;
-		private var debug:FlxText;
 		
         override public function create():void
         {
-			debug = new FlxText(0, 0, FlxG.width, "GO");
-			add(debug);
-			
 			// Set up refresh rates
 			FlxG.framerate = 60;
 			FlxG.flashFramerate = 60;
@@ -58,12 +55,12 @@ package
 		{
 			ball = new FlxSprite(156, 116);
 			ball.loadGraphic(ballGraphic, true, true);
-			ball.velocity.x = ballInitVelocityX - (ballInitVelocityX * 2 * Math.floor(Math.random() * 2));
-			var maxY:Number = 150;
-			ball.velocity.y = 0;// Math.floor(Math.random() * (maxY * 2 + 1)) - maxY;
+			var maxY:Number = 50;
+			ball.velocity.y = Math.floor(Math.random() * (maxY * 2 + 1)) - maxY;
+			ball.velocity.x = 120 - (.2 * Math.abs(ball.velocity.y));
+			ball.velocity.x *= 1 - (2 * Math.floor(Math.random() * 2));
 			ball.elasticity = 1;
 			ball.maxVelocity.x = Math.abs(ball.velocity.x) * maxScale;
-			ball.maxVelocity.y = Math.abs(ball.velocity.y) * maxScale;
 			add(ball);
 		}
 		
@@ -84,6 +81,10 @@ package
 		
 		public function paddleCollide(obj1:FlxObject, obj2:FlxObject):void
 		{
+			var paddle:FlxSprite = obj1 as FlxSprite;
+			var ball:FlxSprite = obj2 as FlxSprite;
+			paddle.play("contact");
+			ball.velocity.y += ((ball.y + 4) - (paddle.y + 16)) * 2;
 			ballCollide();
 		}
 		
@@ -92,24 +93,23 @@ package
 			FlxG.play(hitMp3);
 			p1.paddle.scaleSpeed(scale, maxScale);
 			p2.paddle.scaleSpeed(scale, maxScale);
-			if (!(p1.paddle.maxVelocity.y >= p1.paddle.paddleInitMaxVelocityY * maxScale) && !(p2.paddle.maxVelocity.y >= p2.paddle.paddleInitMaxVelocityY * maxScale))
+			if (p1.paddle.maxVelocity.y != p1.paddle.paddleInitMaxVelocityY * maxScale)
 			{
 				ball.velocity.x *= scale;
 				ball.velocity.y *= scale;
 			}
-			else
-			{
-				add(new FlxText(0, 100, FlxG.width, "FULL SPEED" + ball.velocity.x));
-			}
-			debug.text = "" + p1.paddle.maxVelocity.y;
 		}
 		
 		public function updateBall():void
 		{
 			if (ball.x <= 0) // P2 Scores
 			{
-				FlxG.play(pointMp3);
 				p2.score++;
+				if (p2.score >= ptsToWin)
+				{
+					FlxG.switchState(new WinState("2"));
+				}
+				FlxG.play(pointMp3);
 				ball.kill();
 				p1.paddle.resetSpeed();
 				p2.paddle.resetSpeed();
@@ -119,8 +119,12 @@ package
 			
 			else if (ball.x >= 312) // P1 Scores
 			{
-				FlxG.play(pointMp3);
 				p1.score++;
+				if (p1.score >= ptsToWin)
+				{
+					FlxG.switchState(new WinState("1"));
+				}
+				FlxG.play(pointMp3);
 				ball.kill();
 				p1.paddle.resetSpeed();
 				p2.paddle.resetSpeed();

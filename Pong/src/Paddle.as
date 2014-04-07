@@ -13,6 +13,7 @@ package
 		{
 			super(x, y);
 			super.loadGraphic(graphic, true, true, 8, 32);
+			super.addAnimation("contact", [1, 0], 8, false);
 			this.up = up;
 			this.down = down;
 			super.immovable = true;
@@ -40,14 +41,13 @@ package
 					this.velocity.y = 0;
 				}
 			}
-			
 			if (this.y <= 0) {
 				this.y = 0;
 			}
 			else if (this.y > 208) {
 				this.y = 208;
 			}
-			
+	
 			super.update();
 		}
 		
